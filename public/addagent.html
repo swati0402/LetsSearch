@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Details</title>
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+    <!-- styles -->
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+        input[type='submit'],
+        button,
+        [aria-label] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="counter"></p>
+    <nav>
+        <div class="nav-center">
+          <!-- nav header -->
+          <div class="nav-header">
+            <img src="./logo.png" class="logo" alt="logo" />
+            <button class="nav-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+          <!-- links -->
+          <ul class="links">
+            <li>
+              <a href="/">home</a>
+            </li>
+            <li>
+              <a href="/agent.html">agents</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- javascript -->
+      <script src="./browser-app.js"></script>
+    <div id="addnew">
+        <h2>Add new Agent</h2>
+        <table style="border: 1; background-color: beige;">
+            <tr>
+                <td>Id: </td>
+                <td><input type="text" id="_id" /></td>
+            </tr>
+            <tr>
+                <td>Name: </td>
+                <td><input type="text" id="name" /></td>
+            </tr>
+            <tr>
+                <td>Address: </td>
+                <td><input type="text" id="address" /></td>
+            </tr>
+            <tr>
+                <td>City: </td>
+                <td><input type="text" id="city" /></td>
+            </tr>
+            <tr>
+                <td>State: </td>
+                <td><input type="text" id="state" /></td>
+            </tr>
+            <tr>
+                <td>ZipCode: </td>
+                <td><input type="text" id="zipCode" /></td>
+            </tr>
+            <tr>
+                <td>Tier: </td>
+                <td><input type="text" id="tier" /></td>
+            </tr>
+            <tr>
+                <td>Primary Phone: </td>
+                <td><input type="text" id="primary" /></td>
+            </tr>
+            <tr>
+                <td>Mobile Phone: </td>
+                <td><input type="text" id="mobile" /></td>
+            </tr>
+        </table>
+        <div>
+            <form action="javascript:void(0);" method="POST" onsubmit="createAgents()">
+                <input type="submit" value="Add Agent"
+                    style="align-items: center; background-color: lightblue;font-weight: bold;">
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+    <script>
+        const createAgents = async () => {
+            var data = JSON.stringify({
+                "_id": document.getElementById('_id').value,
+                "name": document.getElementById('name').value,
+                "address": document.getElementById('address').value,
+                "city": document.getElementById('city').value,
+                "state": document.getElementById('state').value,
+                "zipCode": document.getElementById('zipCode').value,
+                "tier": document.getElementById('tier').value,
+                "phone": {
+                    "primary": document.getElementById('primary').value,
+                    "mobile": document.getElementById('mobile').value
+                }
+            });
+
+            var config = {
+                method: 'post',
+                url: '/api/agent/',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            axios(config)
+                .then(function (response) {
+                    window.location.href = "/agent.html";
+                })
+                .catch(function (error) {
+                    window.location.href = "/error.html";
+                });
+        }
+    </script>
+</body>
+
+</html>

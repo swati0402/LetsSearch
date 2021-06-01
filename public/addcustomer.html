@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Details</title>
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+    <!-- styles -->
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+        input[type='submit'],
+        button,
+        [aria-label] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="counter"></p>
+    <nav>
+        <div class="nav-center">
+          <!-- nav header -->
+          <div class="nav-header">
+            <img src="./logo.png" class="logo" alt="logo" />
+            <button class="nav-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+          <!-- links -->
+          <ul class="links">
+            <li>
+              <a href="/">home</a>
+            </li>
+            <li>
+              <a href="/agent.html">agents</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- javascript -->
+      <script src="./browser-app.js"></script>
+    <div id="addnew">
+        <h2>Add new Customer</h2>
+        <table style="border: 1; background-color: beige;">
+            <tr>
+                <td>Customer Id: </td>
+                <td><input type="text" id="_id" /></td>
+            </tr>
+            <tr>
+                <td>First Name: </td>
+                <td><input type="text" id="first" /></td>
+            </tr>
+            <tr>
+                <td>Last Name: </td>
+                <td><input type="text" id="last" /></td>
+            </tr>
+            <tr>
+                <td>Age: </td>
+                <td><input type="text" id="age" /></td>
+            </tr>
+            <tr>
+                <td>IsActive: </td>
+                <td><input type="text" id="isActive" /></td>
+            </tr>
+            <tr>
+                <td>EyeColor: </td>
+                <td><input type="text" id="eyeColor" /></td>
+            </tr>
+            <tr>
+                <td>Address: </td>
+                <td><input type="text" id="address" /></td>
+            </tr>
+            <tr>
+                <td>Company: </td>
+                <td><input type="text" id="company" /></td>
+            </tr>
+            <tr>
+                <td>Email: </td>
+                <td><input type="text" id="email" /></td>
+            </tr>
+            <tr>
+                <td>Phone: </td>
+                <td><input type="text" id="phone" /></td>
+            </tr>
+            <tr>
+                <td>Balance: </td>
+                <td><input type="text" id="balance" /></td>
+            </tr>
+            <tr>
+                <td>Registered Date: </td>
+                <td><input type="text" id="registered" /></td>
+            </tr>
+            <tr>
+                <td>Latitude: </td>
+                <td><input type="text" id="latitude" /></td>
+            </tr>
+            <tr>
+                <td>Longitude: </td>
+                <td><input type="text" id="longitude" /></td>
+            </tr>
+            <tr>
+                <td>Tags: </td>
+                <td><input type="text" id="tags" /></td>
+            </tr>
+        </table>
+        <div>
+            <form action="javascript:void(0);" method="POST" onsubmit="AddCustomer()">
+                <input type="submit" value="Add Customer"
+                    style="align-items: center; background-color: lightblue;font-weight: bold;">
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+    <script>
+        const people = []
+        const result = document.getElementById('agentname');
+
+        const AddCustomer = async () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const agentid = urlParams.get('id');
+            const apiurl = "api/agent/" + agentid + "/customer"
+            var data = JSON.stringify({
+                "_id": document.getElementById('_id').value,
+                "agent_id": agentid,
+                "isActive": document.getElementById('isActive').value,
+                "balance": document.getElementById('balance').value,
+                "age": document.getElementById('age').value,
+                "eyeColor": document.getElementById('eyeColor').value,
+                "name": {
+                    "first": document.getElementById('first').value,
+                    "last": document.getElementById('last').value
+                },
+                "company": document.getElementById('company').value,
+                "email": document.getElementById('email').value,
+                "phone": document.getElementById('phone').value,
+                "address": document.getElementById('address').value,
+                "registered": document.getElementById('registered').value,
+                "latitude": document.getElementById('latitude').value,
+                "longitude": document.getElementById('longitude').value,
+                "tags": [
+                    document.getElementById('tags').value
+                ]
+            });
+
+            var config = {
+                method: 'post',
+                url: apiurl,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            axios(config)
+                .then(function (response) {
+                    console.log(response)
+                    window.location.href = "/customers.html?id=" + agentid;
+                })
+                .catch(function (error) {
+                    console.log(error)
+                    window.location.href = "/error.html";
+                });
+        }
+    </script>
+</body>
+
+</html>

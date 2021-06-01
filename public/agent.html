@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Agents List</title>
+  <!-- font-awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+  <!-- styles -->
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    input[type='submit'],
+    button,
+    [aria-label] {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <p id="counter"></p>
+  <nav>
+    <div class="nav-center">
+      <!-- nav header -->
+      <div class="nav-header">
+        <img src="./logo.png" class="logo" alt="logo" />
+        <button class="nav-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <!-- links -->
+      <ul class="links">
+        <li>
+          <a href="/">home</a>
+        </li>
+        <li>
+          <a href="/agent.html">agents</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- javascript -->
+  <script src="./browser-app.js"></script>
+  <h2>Agents's List</h2>
+  <table border="1" style="border: 1; background-color: beige;">
+    <thead>
+      <th>Name</th>
+    </thead>
+    <tbody id="agentname">
+    </tbody>
+  </table>
+  <div>
+    <span>
+
+    </span>
+  </div>
+  <form action="javascript:void(0);" method="POST" onsubmit="GoToAddAgent()">
+    <input type="submit" value="Add new Agent">
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+    integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+    crossorigin="anonymous"></script>
+  <script>
+    const result = document.getElementById('agentname');
+
+    const fetchAgents = async () => {
+      try {
+        const {
+          data
+        } = await axios.get('/api/agent')
+
+        const people = data
+        if (people.data.length > 0) {
+          var adata = '';
+          for (i = 0; i < people.data.length; i++) {
+            adata += '<tr border=1>';
+            adata += '<td border=1>' + people.data[i].name + '</td>';
+            adata += '<td border=1><button onclick="GotToUpdateCustomers(' + people.data[i]._id +
+              ')">Edit Agent</button></td>';
+            adata += '<td border=1><button onclick="GetAllCustomers(' + people.data[i]._id +
+              ')">Get All Customers</button></td>';
+            adata += '</tr>';
+          }
+        }
+        result.innerHTML = adata;
+      } catch (error) {
+        result.innerHTML = `<div class="alert alert-danger">Can't Fetch Data</div>`
+      }
+    }
+    fetchAgents()
+    const GoToAddAgent = () => {
+      window.location.href = "/addagent.html"
+    }
+    const GetAllCustomers = (id) => {
+      window.location.href = "/customers.html?id=" + id
+    }
+    const GotToUpdateCustomers = (id) => {
+      window.location.href = "/agentsdetails.html?id=" + id
+    }
+  </script>
+</body>
+
+</html>

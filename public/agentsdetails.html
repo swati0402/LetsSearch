@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Agent Details</title>
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+    <!-- styles -->
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+        input[type='submit'],
+        button,
+        [aria-label] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="counter"></p>
+    <nav>
+        <div class="nav-center">
+          <!-- nav header -->
+          <div class="nav-header">
+            <img src="./logo.png" class="logo" alt="logo" />
+            <button class="nav-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+          <!-- links -->
+          <ul class="links">
+            <li>
+              <a href="/">home</a>
+            </li>
+            <li>
+              <a href="/agent.html">agents</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- javascript -->
+      <script src="./browser-app.js"></script>
+    <div id="edit">
+        <h2>Update Agent Details</h2>
+        <table border="1" style="border: 1; background-color: beige;">
+            <tbody id="agentname">
+            </tbody>
+        </table>
+        <div>
+            <form action="javascript:void(0);" method="POST" onsubmit="UpdateAgent()">
+                <input type="submit" value="Update Agent"
+                    style="align-items: center; background-color: lightblue; font-weight: bold;">
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+    <script>
+        const people = []
+        const result = document.getElementById('agentname');
+        const fetchAgentById = async () => {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const agentid = urlParams.get('id');
+                const getapiurl = "api/agent/" + agentid
+                const {
+                    data
+                } = await axios.get(getapiurl)
+
+                people[0] = data
+                if (people) {
+                    var adata = '';
+                    adata += '<tr border=1>';
+                    adata += '<td>Name: </td><td border=1><input type="text" id="name" value="' + people[0].data
+                        .name + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Address: </td><td border=1><input type="text" id="address" value="' + people[
+                        0].data.address + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>City: </td><td border=1><input type="text" id="city" value="' + people[0].data
+                        .city + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>State: </td><td border=1><input type="text" id="state" value="' + people[0]
+                        .data.state + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Zipcode: </td><td border=1><input type="text" id="zipCode" value="' + people[
+                        0].data.zipCode + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Tier: </td><td border=1><input type="text" id="tier" value="' + people[0].data
+                        .tier + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Primary Phone: </td><td border=1><input type="text" id="primary" value="' +
+                        people[0].data.phone.primary + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Mobile Phone: </td><td border=1><input type="text" id="mobile" value="' +
+                        people[0].data.phone.mobile + '"/></td>';
+                    adata += '</tr>';
+
+                }
+                result.innerHTML = adata;
+            } catch (error) {
+                result.innerHTML = `<div class="alert alert-danger">Can't Fetch Data</div>`
+            }
+        }
+        fetchAgentById()
+        const UpdateAgent = () => {
+                const urlParams = new URLSearchParams(window.location.search);
+                const agentid = urlParams.get('id');
+                const postapiurl = "api/agent/" + agentid
+
+                var data = JSON.stringify({
+                    "name": document.getElementById('name').value,
+                    "address": document.getElementById('address').value,
+                    "city": document.getElementById('city').value,
+                    "state": document.getElementById('state').value,
+                    "zipCode": document.getElementById('zipCode').value,
+                    "tier": document.getElementById('tier').value,
+                    "phone": {
+                        "primary": document.getElementById('primary').value,
+                        "mobile": document.getElementById('mobile').value
+                    }
+                });
+
+                var config = {
+                    method: 'put',
+                    url: postapiurl,
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    data: data
+                };
+
+                axios(config)
+                    .then(function (response) {
+                        window.location.href = "/agent.html";
+                    })
+                    .catch(function (error) {
+                        window.location.href = "/error.html";
+                    });
+                }
+    </script>
+</body>
+
+</html>

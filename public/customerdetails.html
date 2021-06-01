@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Details</title>
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+    <!-- styles -->
+    <link rel="stylesheet" href="./styles.css" />
+    <style>
+        input[type='submit'],
+        button,
+        [aria-label] {
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <p id="counter"></p>
+    <nav>
+        <div class="nav-center">
+          <!-- nav header -->
+          <div class="nav-header">
+            <img src="./logo.png" class="logo" alt="logo" />
+            <button class="nav-toggle">
+              <i class="fas fa-bars"></i>
+            </button>
+          </div>
+          <!-- links -->
+          <ul class="links">
+            <li>
+              <a href="/">home</a>
+            </li>
+            <li>
+              <a href="/agent.html">agents</a>
+            </li>
+          </ul>
+        </div>
+      </nav>
+      <!-- javascript -->
+      <script src="./browser-app.js"></script>
+    <div id="edit">
+        <h2>Update Customer Details</h2>
+        <table border="1" style="border: 1; background-color: beige;">
+            <tbody id="customername">
+            </tbody>
+        </table>
+        <div>
+            <form action="javascript:void(0);" method="POST" onsubmit="UpdateCustomer()">
+                <input type="submit" value="Update Customer"
+                    style="align-items: center; background-color: lightblue; font-weight: bold;">
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+        integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+        crossorigin="anonymous"></script>
+    <script>
+        const people = []
+        const result = document.getElementById('customername');
+        const fetchCustomerById = async () => {
+            try {
+                const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
+                for (const [key, value] of urlParams) {
+                    if (key == "id") {
+                        agentid = value
+                    }
+                    if (key.trim() == "cid") {
+                        cid = value
+                    }
+                }
+                // const agentid = urlParams.get('id');
+                // const cid = urlParams.getall('cid');
+                const getapiurl = "api/agent/" + agentid + "/customer/" + cid
+
+                const {
+                    data
+                } = await axios.get(getapiurl)
+
+                people[0] = data
+                if (people) {
+                    var adata = '';
+                    adata += '<tr border=1>';
+                    adata += '<td>First name: </td><td border=1><input type="text" id="first" value="' + people[
+                            0].data
+                        .name.first + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Last Name: </td><td border=1><input type="text" id="last" value="' + people[0]
+                        .data
+                        .name.last + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Age: </td><td border=1><input type="text" id="age" value="' + people[0].data
+                        .age + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>IsActive: </td><td border=1><input type="text" id="isActive" value="' + people[0].data
+                        .isActive + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>EyeColor: </td><td border=1><input type="text" id="eyeColor" value="' + people[0].data
+                        .eyeColor + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Address: </td><td border=1><input type="text" id="address" value="' + people[
+                        0].data.address + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Company: </td><td border=1><input type="text" id="company" value="' + people[
+                            0].data
+                        .company + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Email: </td><td border=1><input type="text" id="email" value="' + people[0]
+                        .data.email + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Phone: </td><td border=1><input type="text" id="phone" value="' + people[
+                        0].data.phone + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Balance: </td><td border=1><input type="text" id="balance" value="' + people[0]
+                        .data
+                        .balance + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata +=
+                        '<td>Registered Date: </td><td border=1><input type="text" id="registered" value="' +
+                        people[0].data.registered + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<tr border=1>';
+                    adata += '<td>Latitude: </td><td border=1><input type="text" id="latitude" value="' +
+                        people[0].data.latitude + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<td>Longitude: </td><td border=1><input type="text" id="longitude" value="' +
+                        people[0].data.longitude + '"/></td>';
+                    adata += '</tr>';
+                    adata += '<td>Tags: </td><td border=1><input type="text" id="tags" value="' +
+                        people[0].data.tags + '"/></td>';
+                    adata += '</tr>';
+
+                }
+                result.innerHTML = adata;
+            } catch (error) {
+                result.innerHTML = `<div class="alert alert-danger">Can't Fetch Data</div>`
+            }
+        }
+        fetchCustomerById()
+        const UpdateCustomer = () => {
+            const urlParams = new URLSearchParams(decodeURIComponent(window.location.search));
+            for (const [key, value] of urlParams) {
+                if (key == "id") {
+                    id = value
+                }
+                if (key.trim() == "cid") {
+                    cid = value
+                }
+            }
+            const apiurl = "api/agent/" + id + "/customer/" + cid
+            var data = JSON.stringify({
+                "_id": cid,
+                "agent_id": id,
+                "isActive": document.getElementById('isActive').value,
+                "balance": document.getElementById('balance').value,
+                "age": document.getElementById('age').value,
+                "eyeColor": document.getElementById('eyeColor').value,
+                "name": {
+                    "first": document.getElementById('first').value,
+                    "last": document.getElementById('last').value
+                },
+                "company": document.getElementById('company').value,
+                "email": document.getElementById('email').value,
+                "phone": document.getElementById('phone').value,
+                "address": document.getElementById('address').value,
+                "registered": document.getElementById('registered').value,
+                "latitude": document.getElementById('latitude').value,
+                "longitude": document.getElementById('longitude').value,
+                "tags": [
+                    document.getElementById('tags').value
+                ]
+            });
+
+            var config = {
+                method: 'put',
+                url: apiurl,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                data: data
+            };
+
+            axios(config)
+                .then(function (response) {
+                    window.location.href = "/customers.html?id=" + id;
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    window.location.href = "/error.html";
+                });
+        }
+    </script>
+</body>
+
+</html>

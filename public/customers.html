@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Customers List</title>
+  <!-- font-awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+
+  <!-- styles -->
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    input[type='submit'],
+    button,
+    [aria-label] {
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <p id="counter"></p>
+  <nav>
+    <div class="nav-center">
+      <!-- nav header -->
+      <div class="nav-header">
+        <img src="./logo.png" class="logo" alt="logo" />
+        <button class="nav-toggle">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <!-- links -->
+      <ul class="links">
+        <li>
+          <a href="/">home</a>
+        </li>
+        <li>
+          <a href="/agent.html">agents</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- javascript -->
+  <script src="./browser-app.js"></script>
+  <h2>Customers's List</h2>
+  <table border="1" style="border: 1; background-color: beige;">
+    <thead>
+      <th>Name</th>
+      <th>City</th>
+      <th>State</th>
+    </thead>
+    <tbody id="customersname">
+    </tbody>
+  </table>
+  <div>
+    <span>
+
+    </span>
+  </div>
+  <form action="javascript:void(0);" method="POST" onsubmit="GotoAddCustomer()">
+    <input type="submit" value="Add new Customer">
+  </form>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"
+    integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ=="
+    crossorigin="anonymous"></script>
+  <script>
+    const result = document.getElementById('customersname');
+
+    const fetchCustomers = async () => {
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const getapiurl = "api/agent/" + id + "/customer"
+        const {
+          data
+        } = await axios.get(getapiurl)
+
+        const people = data
+
+        if (people.data.length > 0) {
+          var adata = '';
+          for (i = 0; i < people.data.length; i++) {
+            const address = people.data[i].address.split(",")
+            const city = address[1];
+            const state = address[2];
+            adata += '<tr border=1>';
+            adata += '<td border=1>' + people.data[i].name.last + ' ,' + people.data[i].name.first + '</td>';
+            adata += '<td border=1>' + city + '</td>';
+            adata += '<td border=1>' + state + '</td>';
+            adata += '<td border=1><button onclick="GotoUpdateCustomer(' + people.data[i].agent_id + ',' + people
+              .data[i]._id + ')">Edit Customer</button></td>';
+            adata += '<td border=1><button onclick="DeleteCustomer(' + people.data[i]._id + ')">Delete Customer</button></td>';
+            adata += '</tr>';
+          }
+        }
+        result.innerHTML = adata;
+      } catch (error) {
+        result.innerHTML = `<div class="alert alert-danger">Can't Fetch Data</div>`
+      }
+    }
+
+    fetchCustomers()
+
+    const GotoAddCustomer = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get('id');
+      window.location.href = "/addcustomer.html?id=" + id
+    }
+    const DeleteCustomer = (cid) => {
+      const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        const apiurl = "api/agent/" + id + "/customer/"+cid
+
+      var config = {
+        method: 'delete',
+        url: apiurl,
+        headers: {}
+      };
+
+      axios(config)
+        .then(function (response) {
+          //console.log(JSON.stringify(response.data));
+          location.reload();
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
+    const GotoUpdateCustomer = (id, cid) => {
+      window.location.href = "/customerdetails.html?id=" + id + "& cid=" + cid
+    }
+  </script>
+</body>
+
+</html>
