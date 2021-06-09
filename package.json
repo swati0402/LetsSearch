@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "lint": "eslint",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "",
   "license": "ISC",
@@ -14,5 +14,8 @@
     "express": "^4.17.1",
     "nodemon": "^2.0.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^8.4.0",
+    "supertest": "^6.1.3"
+  }
 }

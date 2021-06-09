@@ -6,7 +6,7 @@ const port = process.env.PORT || 3000;
 
 const agent = require('./router/index')
 const menu= require('./router/menu')
-const agentpage= require('./router/agent')
+//const agentpage= require('./router/agent')
 const agentlist= require('./router/agentlist')
 // view engine setup
 app.set('view engine', 'ejs');
